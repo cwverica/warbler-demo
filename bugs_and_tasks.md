@@ -54,6 +54,7 @@
         Add additional validation to check that user logged in is author,
         otherwise, flash permission error, redirect
 
+
 ### In detail.html:
 
     Implement:  ++
@@ -70,7 +71,7 @@
     Implement:
         Add alt for image (line 13) if relevant
 
-    Implement:
+    Implement:  ++
         Bio information/link (line 33)
 
 ### In following.html:
@@ -78,7 +79,7 @@
     Implement:
         Add alt for image (line 12) if relevant
 
-    Implement:
+    Implement:  ++
         Bio information/link (line 31) if relevant
 
 ### In index.html:
@@ -86,7 +87,7 @@
     Implement:
         Add alt for image (line 16) if relevant
 
-    Implement:
+    Implement:  ++
         Bio information/link (line 39)
 
 ### In show.html:

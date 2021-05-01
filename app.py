@@ -220,17 +220,20 @@ def profile():
     form = EditProfileForm(obj=g.user)
 
     if form.validate_on_submit():
-        g.user.image_url = form.image_url.data
-        g.user.header_image_url = form.header_image_url.data
-        g.user.bio = form.bio.data
-        g.user.location = form.location.data
+        if not User.authenticate(g.user.username, form.password.data):
+            flash("Password does not match.", "warning")
+            return redirect('/users/profile')
+        else:
+            g.user.image_url = form.image_url.data
+            g.user.header_image_url = form.header_image_url.data
+            g.user.bio = form.bio.data
+            g.user.location = form.location.data
 
-        db.session.commit()
-        flash("Profile updated.", "success")
-        return redirect(f"/users/{g.user.id}")
-    
+            db.session.commit()
+            flash("Profile updated.", "success")
+            return redirect(f"/users/{g.user.id}")
 
-    return render_template('/users/edit.html', form=form)
+    return render_template('/users/edit.html', form=form, user_id=g.user.id)
 
 
 @app.route('/users/delete', methods=["POST"])
@@ -316,9 +319,12 @@ def homepage():
     """
 
     if g.user:
+        follower_ids = [user.id for user in g.user.following]
+        follower_ids.append(g.user.id)  
         messages = (Message
                     .query
-                    .order_by(Message.timestamp.desc())
+                    .filter(Message.user_id.in_(follower_ids))
+                    .order_by(Message.timestamp.desc()) #TODO:
                     .limit(100)
                     .all())
 

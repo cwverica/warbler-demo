@@ -44,10 +44,10 @@
     Implement:  ++
         logout route/function (line 116)
 
-    Implement:
-        profile route/function (line 214)
+    Implement:  ++
+        edit profile route/function (line 214)
 
-    Bug:
+    Bug:  ++
         In app route 'messages_destroy' (line 268):
             validates a user is logged in. does not validate that user is author of message
     Fix:
@@ -56,13 +56,13 @@
 
 ### In detail.html:
 
-    Implement:
+    Implement:  ++
         Likes stats/link (line 32)
 
-    Implement:
+    Implement:  ++
         Bio information (line 61)
 
-    Implement:
+    Implement:  ++
         Location information (line 62)
 
 ### In followers.html:
@@ -74,6 +74,9 @@
         Bio information/link (line 33)
 
 ### In following.html:
+
+    Implement:
+        Add alt for image (line 12) if relevant
 
     Implement:
         Bio information/link (line 31) if relevant

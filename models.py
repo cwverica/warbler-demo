@@ -34,7 +34,8 @@ class Likes(db.Model):
 
     id = db.Column(
         db.Integer,
-        primary_key=True
+        primary_key=True,
+        autoincrement=True
     )
 
     user_id = db.Column(
@@ -57,6 +58,7 @@ class User(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
     email = db.Column(
@@ -94,7 +96,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    messages = db.relationship('Message')
+    messages = db.relationship('Message', backref='user')
 
     followers = db.relationship(
         "User",
@@ -147,6 +149,7 @@ class User(db.Model):
         )
 
         db.session.add(user)
+        db.session.commit()
         return user
 
     @classmethod
@@ -178,6 +181,7 @@ class Message(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
     text = db.Column(
@@ -193,11 +197,10 @@ class Message(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id', ondelete='CASCADE'),
+        db.ForeignKey('users.id', ondelete='cascade'),
         nullable=False,
     )
 
-    user = db.relationship('User')
 
 
 def connect_db(app):

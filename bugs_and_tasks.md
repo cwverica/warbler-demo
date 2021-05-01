@@ -1,5 +1,8 @@
-items marked with a "++" have been addressed
-items marked with a "+" are in process of being addressed
+>items marked with a "++" have been addressed
+
+>items marked with a "+" are in process of being addressed
+
+---
 
 ### In models.py:
 

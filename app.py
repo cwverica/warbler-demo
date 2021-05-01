@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, MessageForm, EditProfileForm
-from models import db, connect_db, User, Message
+from models import db, connect_db, User, Message, Likes
 
 CURR_USER_KEY = "curr_user"
 
@@ -317,6 +317,8 @@ def homepage():
     - anon users: no messages
     - logged in: 100 most recent messages of followed_users
     """
+    import pdb 
+    pdb.set_trace()
 
     if g.user:
         follower_ids = [user.id for user in g.user.following]
@@ -324,7 +326,7 @@ def homepage():
         messages = (Message
                     .query
                     .filter(Message.user_id.in_(follower_ids))
-                    .order_by(Message.timestamp.desc()) #TODO:
+                    .order_by(Message.timestamp.desc())
                     .limit(100)
                     .all())
 
@@ -332,6 +334,44 @@ def homepage():
 
     else:
         return render_template('home-anon.html')
+
+
+##############################################################################
+# Likes
+
+@app.route('/users/add_like/<int:msg_id>', methods=["POST"])
+def like_warble(msg_id):
+    """like/unlike a warble"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    like = Likes.query.filter((Likes.user_id == g.user.id) & (Likes.message_id == msg_id)).first()
+    
+    if like:
+        db.session.delete(like)
+        db.session.commit()
+        flash("Message unliked.", "warning")
+    else:
+        new_like = Likes(user_id=g.user.id,
+                        message_id=msg_id)
+        db.session.add(new_like)
+        db.session.commit()
+        flash("Message liked.", "info")
+
+    return redirect('/')
+    
+@app.route('/users/<int:user_id>/likes')
+def show_users_likes(user_id):
+
+        if not g.user:
+            flash("Access unauthorized.", "danger")
+            return redirect("/")
+
+        user = User.query.filter(User.id == user_id).first()
+        return render_template('users/likes.html', user=user)
+
 
 
 ##############################################################################

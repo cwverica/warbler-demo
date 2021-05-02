@@ -345,18 +345,20 @@ def like_warble(msg_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     
-    like = Likes.query.filter((Likes.user_id == g.user.id) & (Likes.message_id == msg_id)).first()
+    liked_message = Message.query.get_or_404(msg_id)
+    if liked_message.user_id == g.user.id:
+        flash('You cannot like your own message.', 'warning')
+        return redirect('/')
+    
+    user_likes = g.user.likes
 
-    if like:
-        db.session.delete(like)
-        db.session.commit()
-        flash("Message unliked.", "warning")
+    if liked_message in user_likes:
+        g.user.likes = [like for like in user_likes if like != liked_message]
     else:
-        new_like = Likes(user_id=g.user.id,
-                        message_id=msg_id)
-        db.session.add(new_like)
-        db.session.commit()
-        flash("Message liked.", "info")
+        g.user.likes.append(liked_message)
+
+    db.session.commit()
+
 
     return redirect('/')
     

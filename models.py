@@ -32,11 +32,11 @@ class Likes(db.Model):
 
     __tablename__ = 'likes' 
 
-    # id = db.Column(
-    #     db.Integer,
-    #     primary_key=True,
-    #     autoincrement=True
-    # )
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
 
     user_id = db.Column(
         db.Integer,
@@ -115,9 +115,7 @@ class User(db.Model):
 
     likes = db.relationship(
         'Message',
-        secondary="likes",
-        primaryjoin=(Likes.user_id == id),
-        secondaryjoin=(Likes.message_id == id)
+        secondary="likes"
     )
 
     def __repr__(self):

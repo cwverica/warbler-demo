@@ -204,6 +204,13 @@ class Message(db.Model):
         nullable=False,
     )
 
+    liked_by = db.relationship(
+        'User',
+        secondary="likes",
+        primaryjoin=(Likes.message_id == id),
+        secondaryjoin=(Likes.user_id == id)
+    )
+
 
 
 def connect_db(app):

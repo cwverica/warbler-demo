@@ -346,7 +346,7 @@ def like_warble(msg_id):
         return redirect("/")
     
     like = Likes.query.filter((Likes.user_id == g.user.id) & (Likes.message_id == msg_id)).first()
-    
+
     if like:
         db.session.delete(like)
         db.session.commit()
